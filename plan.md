@@ -14,13 +14,13 @@ Apple-minimalistische Portfolio-Website für Manuel Scholtes (B.Sc. Software Eng
 - **Phosphor Icons** – Clean, Apple-like
 - **Vercel** – Hosting + Auto-Deploy (kostenlos)
 
-## Architektur-Prinzipien
-- Astro: `static` Output. Zero JS by default. React-Islands nur für Animationen & Dark Mode Toggle.
-- Content in `src/content/*.yaml`. Keystatic liest & schreibt per GitHub API. Keine DB.
-- Admin unter `/keystatic` via GitHub OAuth.
-- Tailwind 4: `@theme`-Block. Custom Properties für Farben.
-- Glassmorphism Header (`backdrop-blur-xl`). Cards `rounded-2xl` mit feinem Border.
-- Typografie als Haupt-Stilmittel (Font: Inter, selbst gehostet). Viel Weißraum.
+## Design-System (Dark Tech Minimalism)
+
+- Hintergrund: Deep Charcoal `#0E0E10`, Cards `#18181C`
+- Akzent: Electric Violet `#8B5CF6` → Hell `#A78BFA`
+- Font Body: DM Sans, Headings: Space Grotesk
+- Glassmorphism Header: `bg-bg/70 backdrop-blur-xl`
+- Keine Apple-Farbpalette, kein Inter-Font
 
 ## Projektstruktur
 ```

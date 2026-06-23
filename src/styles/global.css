@@ -1,20 +1,33 @@
 @import 'tailwindcss';
-@import '@fontsource-variable/inter';
+@import '@fontsource-variable/dm-sans';
+@import '@fontsource-variable/space-grotesk';
 
 @theme {
-  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
-  --color-bg-light: #fafafa;
-  --color-bg-dark: #0a0a0a;
-  --color-surface-light: #ffffff;
-  --color-surface-dark: #141414;
-  --color-text-light: #1d1d1f;
-  --color-text-dark: #f5f5f7;
-  --color-muted-light: #86868b;
-  --color-muted-dark: #98989d;
-  --color-border-light: #d2d2d7;
-  --color-border-dark: #2c2c2e;
-  --color-accent-light: #0071e3;
-  --color-accent-dark: #2997ff;
+  --font-sans: 'DM Sans Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-heading: 'Space Grotesk Variable', ui-sans-serif, system-ui, sans-serif;
+
+  /* Light (default) */
+  --color-bg: #fafaf9;
+  --color-surface: #ffffff;
+  --color-surface-hover: #f5f4f1;
+  --color-text: #1c1917;
+  --color-text-muted: #78716c;
+  --color-border: #e7e5e4;
+  --color-accent: #7c3aed;
+  --color-accent-light: #8b5cf6;
+  --color-accent-glow: rgba(124, 58, 237, 0.1);
+}
+
+/* Dark mode – override vars */
+.dark {
+  --color-bg: #0e0e10;
+  --color-surface: #18181c;
+  --color-surface-hover: #1f1f23;
+  --color-text: #ededef;
+  --color-text-muted: #9d9da5;
+  --color-border: #2a2a2f;
+  --color-accent: #8b5cf6;
+  --color-accent-light: #a78bfa;
 }
 
 @layer base {
@@ -22,6 +35,10 @@
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-heading);
   }
 
   @media (prefers-reduced-motion: reduce) {
