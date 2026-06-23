@@ -17,6 +17,11 @@ Minimalistische Portfolio-Website für Manuel Scholtes (B.Sc. Software Engineer)
 ## Design
 Dark Tech Minimalism – reduziert, typografie-zentriert, viel Weißraum. Warmes Weiß im Light-Mode, Deep Charcoal im Dark-Mode. Violette Akzente. DM Sans + Space Grotesk. Glassmorphism auf Cards, Header und Hero-Elementen.
 
+## UX
+- Lebenslauf: Lamplight-Timeline – aktiver Eintrag in Sichtmitte hervorgehoben, andere gedimmt. Scroll-Snap.
+- Skills: animierte Balken (Counter läuft hoch, Bar füllt sich beim Erscheinen)
+- Allgemein: satisfying micro-interactions, smooth transitions
+
 ## Projektstruktur
 ```
 portfolio/
