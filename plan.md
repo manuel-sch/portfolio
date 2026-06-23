@@ -4,23 +4,18 @@
 > Stand: 23.06.2026
 
 ## Ziel
-Apple-minimalistische Portfolio-Website für Manuel Scholtes (B.Sc. Software Engineer). Mit CMS zur einfachen Content-Pflege ohne Code.
+Minimalistische Portfolio-Website für Manuel Scholtes (B.Sc. Software Engineer). Clean, modern, Tech-Ästhetik. Mit CMS zur einfachen Content-Pflege.
 
 ## Tech-Stack
 - **Astro 5** – SSG, Content-driven
 - **Keystatic** – Git-basiertes CMS, nativ in Astro integriert
 - **Tailwind CSS 4** – Utility-First
 - **Motion** – Animationen als React-Islands
-- **Phosphor Icons** – Clean, Apple-like
+- **Phosphor Icons** – Clean, modern
 - **Vercel** – Hosting + Auto-Deploy (kostenlos)
 
-## Design-System (Dark Tech Minimalism)
-
-- Hintergrund: Deep Charcoal `#0E0E10`, Cards `#18181C`
-- Akzent: Electric Violet `#8B5CF6` → Hell `#A78BFA`
-- Font Body: DM Sans, Headings: Space Grotesk
-- Glassmorphism Header: `bg-bg/70 backdrop-blur-xl`
-- Keine Apple-Farbpalette, kein Inter-Font
+## Design
+Dark Tech Minimalism – reduziert, typografie-zentriert, viel Weißraum. Warmes Weiß im Light-Mode, Deep Charcoal im Dark-Mode. Violette Akzente. DM Sans + Space Grotesk. Glassmorphism auf Cards, Header und Hero-Elementen.
 
 ## Projektstruktur
 ```
@@ -54,7 +49,7 @@ portfolio/
 ## Seiten-Konzept
 1. **`/`** – Hero (Avatar, Name, Titel, Social-Icons) + About-Preview (2-3 Sätze). Keine Projekte.
 2. **`/lebenslauf`** – Vertikale Timeline, Skills-Balken + Badge-Cloud, Ausbildung, Sprachen.
-3. **`/projekte`** – Apple-Style horizontaler Snap-Scroll. Nur EIN Projekt auf einmal. Pfeile + Indikator-Punkte.
+3. **`/projekte`** – Horizontaler Snap-Scroll. Nur EIN Projekt auf einmal. Pfeile + Indikator-Punkte.
 
 ## Deployment
 - Push auf `main` → Vercel deployt automatisch
