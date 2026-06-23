@@ -1,0 +1,33 @@
+@import 'tailwindcss';
+@import '@fontsource-variable/inter';
+
+@theme {
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --color-bg-light: #fafafa;
+  --color-bg-dark: #0a0a0a;
+  --color-surface-light: #ffffff;
+  --color-surface-dark: #141414;
+  --color-text-light: #1d1d1f;
+  --color-text-dark: #f5f5f7;
+  --color-muted-light: #86868b;
+  --color-muted-dark: #98989d;
+  --color-border-light: #d2d2d7;
+  --color-border-dark: #2c2c2e;
+  --color-accent-light: #0071e3;
+  --color-accent-dark: #2997ff;
+}
+
+@layer base {
+  html {
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}

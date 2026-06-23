@@ -1,0 +1,33 @@
+---
+const navItems = [
+  { href: '/', label: 'Start' },
+  { href: '/lebenslauf', label: 'Lebenslauf' },
+  { href: '/projekte', label: 'Projekte' },
+];
+const currentPath = Astro.url.pathname;
+---
+
+<header
+  class="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-bg-light/70 dark:bg-bg-dark/50 border-b border-border-light dark:border-border-dark"
+>
+  <nav class="max-w-5xl mx-auto px-6 h-14 flex items-center justify-between">
+    <a href="/" class="text-sm font-semibold tracking-tight text-text-light dark:text-text-dark">
+      MS
+    </a>
+    <ul class="flex gap-6 text-sm">
+      {navItems.map(item => (
+        <li>
+          <a
+            href={item.href}
+            class={`transition-colors duration-200 hover:text-accent-light dark:hover:text-accent-dark
+              ${currentPath === item.href
+                ? 'text-accent-light dark:text-accent-dark'
+                : 'text-muted-light dark:text-muted-dark'}`}
+          > 
+            {item.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+</header>
