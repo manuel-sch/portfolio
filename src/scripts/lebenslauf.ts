@@ -163,6 +163,28 @@ const SKILL_BAR_EASING         = 'width 1s cubic-bezier(0.4, 0, 0.2, 1)';
 const SKILL_OBSERVER_THRESHOLD = 0.3;
 const SKILL_COUNTER_STEPS      = 40;
 
+// -- Farb-Mapping für 3 Level-Stufen --
+interface SkillColor {
+  barColor: string;
+  glowColor: string;
+}
+
+function getSkillColor(level: number): SkillColor {
+  if (level <= 40) {
+    return { barColor: '#F59E0B', glowColor: 'rgba(245,158,11,0.3)' };
+  }
+  if (level <= 70) {
+    return {
+      barColor: 'var(--color-accent)',
+      glowColor: 'var(--color-accent-glow)',
+    };
+  }
+  return {
+    barColor: 'var(--color-accent-light)',
+    glowColor: 'var(--color-accent-glow)',
+  };
+}
+
 function initSkillBars(): void {
   const skillItems    = document.querySelectorAll<HTMLElement>('.skill-item');
   const skillObserver = new IntersectionObserver((entries) => {
@@ -183,6 +205,17 @@ function initSkillBars(): void {
         if (current < target) {
           current = Math.min(current + Math.ceil(target / SKILL_COUNTER_STEPS), target);
           counter.textContent = current + '%';
+
+          if (current >= target) {
+            const { barColor, glowColor } = getSkillColor(target);
+            bar.style.backgroundColor = barColor;
+            bar.style.setProperty('--glow-color', glowColor);
+            setTimeout(() => {
+              bar.classList.add('pulse');
+              setTimeout(() => bar.classList.remove('pulse'), 600);
+            }, 500);
+          }
+
           requestAnimationFrame(step);
         }
       };

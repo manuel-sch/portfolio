@@ -1,8 +1,27 @@
 <footer class="max-w-5xl mx-auto px-6 py-8 text-sm text-text-muted">
   <div class="flex justify-between items-center">
     <span>&copy; 2026 Manuel Scholtes</span>
-    <a href="/impressum" class="hover:text-accent-light transition-colors duration-200">
+    <a href="/impressum" class="footer-link relative pb-0.5 hover:text-accent-light hover:scale-[1.02] active:scale-95 transition-[transform,color] duration-200 active:duration-100">
       Impressum
     </a>
   </div>
 </footer>
+
+<style>
+  .footer-link::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 1.5px;
+    background: var(--color-accent-light);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .footer-link:hover::after {
+    transform: scaleX(1);
+  }
+</style>

@@ -1,6 +1,6 @@
 <button
   id="theme-toggle"
-  class="p-2 rounded-full text-text-muted hover:text-accent transition-colors duration-200"
+  class="relative grid place-items-center p-2 rounded-full text-text-muted hover:text-accent hover:bg-accent/10 hover:scale-110 active:scale-90 transition-[transform,color,background-color,box-shadow] duration-200 active:duration-100"
   aria-label="Theme wechseln"
 >
   <svg id="sun-icon" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -11,6 +11,30 @@
     <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
   </svg>
 </button>
+
+<style>
+  /* Stack icons via CSS Grid – beide liegen übereinander */
+  #theme-toggle > svg {
+    grid-area: 1 / 1;
+  }
+
+  /* Sanfte Sonne↔Mond Transition mit Overshoot */
+  #sun-icon, #moon-icon {
+    transition: transform 150ms cubic-bezier(0.34, 1.56, 0.64, 1), opacity 150ms ease-out;
+  }
+
+  #sun-icon.hidden {
+    opacity: 0;
+    transform: scale(0.3) rotate(180deg);
+    pointer-events: none;
+  }
+
+  #moon-icon.hidden {
+    opacity: 0;
+    transform: scale(0.3) rotate(-180deg);
+    pointer-events: none;
+  }
+</style>
 
 <script>
   const btn = document.getElementById('theme-toggle');
@@ -28,5 +52,11 @@
     localStorage.setItem('theme', isDark ? 'dark' : 'light');
     sun.classList.toggle('hidden', isDark);
     moon.classList.toggle('hidden', !isDark);
+
+    /* Glow-Pulse: kurzer Leuchteffekt beim Toggle */
+    btn.style.boxShadow = '0 0 16px var(--color-accent-glow)';
+    setTimeout(() => {
+      btn.style.boxShadow = '';
+    }, 400);
   });
 </script>

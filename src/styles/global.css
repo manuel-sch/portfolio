@@ -28,6 +28,7 @@
   --color-border: #2a2a2f;
   --color-accent: #4ADE80;
   --color-accent-light: #86EFAC;
+  --color-accent-glow: rgba(74, 222, 128, 0.15);
 }
 
 @layer base {
