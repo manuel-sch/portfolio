@@ -1,8 +1,11 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import HeroSection from '@/components/home/HeroSection.astro';
+import { pageTransition } from '@/lib/transitions';
 ---
 
 <BaseLayout>
-  <HeroSection />
+  <main transition:name="page-content" transition:animate={pageTransition}>
+    <HeroSection />
+  </main>
 </BaseLayout>

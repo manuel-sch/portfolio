@@ -10,13 +10,17 @@ const currentPath = Astro.url.pathname;
 ---
 
 <header
+  transition:persist
   class="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-bg/70 border-b border-border"
 >
   <nav class="max-w-5xl mx-auto px-6 h-14 flex items-center justify-between">
-    <a href="/" class="text-sm font-bold tracking-tight text-text dark:text-text-dark font-heading">
+    <!-- Brand -->
+    <a href="/" class="text-sm font-bold tracking-tight text-text dark:text-text-dark font-heading shrink-0">
       MS
     </a>
-    <div class="flex items-center gap-6">
+
+    <!-- Desktop Navigation (≥640px) -->
+    <div class="hidden sm:flex items-center gap-6">
       <ul class="flex gap-6 text-sm">
         {navItems.map(item => (
           <li>
@@ -32,9 +36,53 @@ const currentPath = Astro.url.pathname;
           </li>
         ))}
       </ul>
+    </div>
+
+    <!-- ThemeToggle (immer sichtbar) + Hamburger (nur Mobile) -->
+    <div class="flex items-center gap-2">
       <ThemeToggle />
+
+      <button
+        id="nav-toggle-btn"
+        class="nav-toggle sm:hidden flex flex-col items-center justify-center gap-[5px]
+               min-w-[44px] min-h-[44px] rounded-full
+               text-text-muted hover:text-accent hover:bg-accent/10
+               transition-colors duration-200"
+        aria-label="Navigation umschalten"
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+      >
+        <span class="nav-ham-line block w-5 h-0.5 bg-current rounded-full transition-all duration-300 ease-out"></span>
+        <span class="nav-ham-line block w-5 h-0.5 bg-current rounded-full transition-all duration-300 ease-out"></span>
+        <span class="nav-ham-line block w-5 h-0.5 bg-current rounded-full transition-all duration-300 ease-out"></span>
+      </button>
     </div>
   </nav>
+
+  <!-- Mobile Dropdown Menu (nur <640px) -->
+  <div
+    id="mobile-menu"
+    class="sm:hidden"
+    aria-hidden="true"
+  >
+    <div class="px-6 pt-2 pb-8 backdrop-blur-xl bg-bg/95 border-b border-border/50
+                shadow-[0_20px_40px_-12px_var(--color-accent-glow)]">
+      <nav class="flex flex-col gap-1">
+        {navItems.map(item => (
+          <a
+            href={item.href}
+            class={`mobile-nav-link relative flex items-center px-4 py-3.5 rounded-xl text-base font-medium
+                   transition-[background-color,color] duration-200
+                   ${currentPath === item.href
+                     ? 'text-accent dark:text-accent-dark bg-accent/5 font-semibold'
+                     : 'text-text-muted dark:text-text-muted-dark hover:bg-surface-hover hover:text-text'}`}
+          >
+            {item.label}
+          </a>
+        ))}
+      </nav>
+    </div>
+  </div>
 </header>
 
 <style lang="scss">
@@ -43,4 +91,147 @@ const currentPath = Astro.url.pathname;
   .nav-link {
     @include lu.link-underline;
   }
+
+  /* ============================================================
+     Mobile Menu – Slide-Down
+     ============================================================ */
+
+  #mobile-menu {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      max-height 400ms cubic-bezier(0.4, 0, 0.2, 1),
+      opacity    300ms ease-out,
+      visibility 300ms ease-out;
+  }
+
+  #mobile-menu.nav--open {
+    max-height: 100vh;
+    opacity: 1;
+    visibility: visible;
+    transition:
+      max-height 500ms cubic-bezier(0.22, 1, 0.36, 1),
+      opacity    250ms ease-out 50ms,
+      visibility 0ms;
+  }
+
+  /* ============================================================
+     Hamburger → Minus Animation
+     (gap=5px, Linie=2px → Distanz Mitte→Mitte = 7px)
+     ============================================================ */
+
+  /* Oben: fährt nach unten in die Mitte + fade */
+  .nav-toggle.nav--open .nav-ham-line:nth-child(1) {
+    transform: translateY(7px);
+    opacity: 0;
+  }
+
+  /* Mitte: bleibt, wird etwas breiter → Minus */
+  .nav-toggle.nav--open .nav-ham-line:nth-child(2) {
+    transform: scaleX(1.15);
+  }
+
+  /* Unten: fährt nach oben in die Mitte + fade */
+  .nav-toggle.nav--open .nav-ham-line:nth-child(3) {
+    transform: translateY(-7px);
+    opacity: 0;
+  }
+
+  /* ============================================================
+     Mobile Nav Links – Accent-Balken bei Hover
+     ============================================================ */
+
+  .mobile-nav-link {
+    &::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      border-radius: 0 2px 2px 0;
+      background: var(--color-accent);
+      transform: scaleY(0);
+      transition: transform 200ms ease-out;
+    }
+
+    &:hover::before {
+      transform: scaleY(1);
+    }
+  }
 </style>
+
+<script>
+  (function() {
+    const btn  = document.getElementById('nav-toggle-btn');
+    const menu = document.getElementById('mobile-menu');
+    if (!btn || !menu) return;
+
+    const isOpen = () => btn.classList.contains('nav--open');
+
+    const open = () => {
+      btn.classList.add('nav--open');
+      menu.classList.add('nav--open');
+      btn.setAttribute('aria-expanded', 'true');
+      menu.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    };
+
+    const close = () => {
+      btn.classList.remove('nav--open');
+      menu.classList.remove('nav--open');
+      btn.setAttribute('aria-expanded', 'false');
+      menu.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+    };
+
+    btn.addEventListener('click', () => {
+      isOpen() ? close() : open();
+    });
+
+    menu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', close);
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && isOpen()) {
+        close();
+        btn.focus();
+      }
+    });
+
+    // --- View Transition Handlers ---
+
+    // Aktiven Nav-Link nach View-Transition aktualisieren
+    document.addEventListener('astro:after-swap', () => {
+      const path = window.location.pathname;
+      document.querySelectorAll('.nav-link').forEach(link => {
+        const href = link.getAttribute('href');
+        const isActive = href === path;
+        link.classList.toggle('text-accent', isActive);
+        link.classList.toggle('dark:text-accent-dark', isActive);
+        link.classList.toggle('text-text-muted', !isActive);
+        link.classList.toggle('dark:text-text-muted-dark', !isActive);
+      });
+      document.querySelectorAll('.mobile-nav-link').forEach(link => {
+        const href = link.getAttribute('href');
+        const isActive = href === path;
+        link.classList.toggle('text-accent', isActive);
+        link.classList.toggle('dark:text-accent-dark', isActive);
+        link.classList.toggle('bg-accent/5', isActive);
+        link.classList.toggle('font-semibold', isActive);
+        link.classList.toggle('text-text-muted', !isActive);
+        link.classList.toggle('dark:text-text-muted-dark', !isActive);
+      });
+    });
+
+    // Mobiles Menü vor Navigation schließen
+    document.addEventListener('astro:before-swap', () => {
+      if (isOpen()) {
+        close();
+      }
+    });
+  })();
+</script>

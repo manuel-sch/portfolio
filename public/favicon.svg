@@ -1,0 +1,30 @@
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" role="img">
+  <title>MS – Manuel Scholtes</title>
+  <desc>Self-closing JSX tag favicon for manuelscholtes.de – Tech Minimalism</desc>
+
+  <!-- Linke spitze Klammer: subtiler Code-Syntax-Accent, opacity ~58%    -->
+  <text
+    x="9" y="55"
+    font-family="ui-monospace, 'Fira Code', 'Cascadia Code', 'SF Mono', monospace"
+    font-size="11" font-weight="300"
+    fill="#4ADE80" opacity="0.58">&lt;</text>
+
+  <!-- MS: primäres Markenzeichen – Space Grotesk Bold                    -->
+  <!-- ⚠ PRODUCTION: Text → Pfade konvertieren (Figma Flatten /           -->
+  <!--   Inkscape Path › Object to Path) für 100% Font-Unabhängigkeit     -->
+  <text
+    x="50" y="65"
+    text-anchor="middle"
+    font-family="'Space Grotesk', 'DM Sans', system-ui, sans-serif"
+    font-size="38" font-weight="700"
+    fill="#4ADE80">MS</text>
+
+  <!-- Rechte Klammer: /&gt; JSX self-closing Accent                      -->
+  <text
+    x="91" y="55"
+    text-anchor="end"
+    font-family="ui-monospace, 'Fira Code', 'Cascadia Code', 'SF Mono', monospace"
+    font-size="11" font-weight="300"
+    fill="#4ADE80" opacity="0.58">/&gt;</text>
+
+</svg>

@@ -1,0 +1,170 @@
+- generic [active] [ref=e1]:
+  - text: clau
+  - banner [ref=e2]:
+    - navigation [ref=e3]:
+      - link "MS" [ref=e4] [cursor=pointer]:
+        - /url: /
+      - list [ref=e6]:
+        - listitem [ref=e7]:
+          - link "Start" [ref=e8] [cursor=pointer]:
+            - /url: /
+        - listitem [ref=e9]:
+          - link "Lebenslauf" [ref=e10] [cursor=pointer]:
+            - /url: /lebenslauf
+        - listitem [ref=e11]:
+          - link "Projekte" [ref=e12] [cursor=pointer]:
+            - /url: /projekte
+      - button "Theme wechseln" [ref=e14]:
+        - img [ref=e15]
+  - main [ref=e18]:
+    - generic [ref=e19]:
+      - generic [ref=e20]:
+        - heading "Berufserfahrung" [level=2] [ref=e22]
+        - generic [ref=e23]:
+          - generic [ref=e25]:
+            - generic [ref=e26]:
+              - heading "Fullstack Engineer" [level=2] [ref=e27]
+              - text: Teilzeit
+            - list [ref=e28]:
+              - listitem [ref=e29]: — Barrierefreie Frontend-Entwicklung nach Figma-Designs in Scrumban
+              - listitem [ref=e30]: — CMS-Logik in Coremedia per Themes, SASS, JSX & Alpine.js
+            - generic [ref=e31]:
+              - img "JavaScript"
+              - img "SASS"
+              - img "Alpine.js"
+              - img "CMS"
+            - generic [ref=e33]:
+              - img "Babiel GmbH" [ref=e34]
+              - generic [ref=e35]:
+                - text: Babiel GmbH
+                - link "Babiel GmbH auf LinkedIn" [ref=e36] [cursor=pointer]:
+                  - /url: https://de.linkedin.com/company/babiel-gmbh
+                  - img [ref=e37]
+          - generic [ref=e40]:
+            - generic [ref=e41]:
+              - heading "Android-Entwickler" [level=2] [ref=e42]
+              - text: Teilzeit
+            - list [ref=e43]:
+              - listitem [ref=e44]: — Entwicklung & Testing von Solar-Energy-Android-Apps im Scrum
+              - listitem [ref=e45]: — Asynchrone Programmierung mit Kotlin, Jetpack, Coroutines, MockK
+            - generic [ref=e46]:
+              - img "Kotlin"
+              - img "Android SDK"
+              - img "Jetpack"
+              - img "Coroutines"
+            - generic [ref=e48]:
+              - img "Fronius Deutschland GmbH" [ref=e49]
+              - generic [ref=e50]:
+                - text: Fronius Deutschland GmbH
+                - link "Fronius Deutschland GmbH auf LinkedIn" [ref=e51] [cursor=pointer]:
+                  - /url: https://de.linkedin.com/company/froniusdeutschland
+                  - img [ref=e52]
+          - generic [ref=e55]:
+            - generic [ref=e56]:
+              - heading "Android-Entwicklung" [level=2] [ref=e57]
+              - text: Werkstudent
+            - list [ref=e58]:
+              - listitem [ref=e59]: — Entwicklung, Analyse & UI-Testing für Android-Apps im Scrum
+              - listitem [ref=e60]: — View-Layer mit Java und XML-Views
+              - listitem [ref=e61]: — Build-Tool Gradle, UI-Bibliothek Material Design
+            - generic [ref=e62]:
+              - img "Java"
+              - img "Android SDK"
+              - img "Gradle"
+              - img "Material Design"
+            - generic [ref=e64]:
+              - img "PROMOS consult GmbH" [ref=e65]
+              - generic [ref=e66]:
+                - text: PROMOS consult GmbH
+                - link "PROMOS consult GmbH auf LinkedIn" [ref=e67] [cursor=pointer]:
+                  - /url: https://de.linkedin.com/company/promos-consult-projektmanagement-organisation-und-service-gmbh
+                  - img [ref=e68]
+          - generic [ref=e71]:
+            - generic [ref=e72]:
+              - heading "Barrierefreiheit Android" [level=2] [ref=e73]
+              - text: Praktikum
+            - list [ref=e74]:
+              - listitem [ref=e75]: — Migration CI/CD von Jenkins zu Azure Pipelines
+              - listitem [ref=e76]: — Analyse & Einpflegung von Barrierefreiheit in Android-Apps
+            - generic [ref=e77]:
+              - img "Azure"
+              - img "CI/CD"
+              - img "Android"
+              - img "Barrierefreiheit"
+            - generic [ref=e79]:
+              - img "PROMOS consult GmbH" [ref=e80]
+              - generic [ref=e81]:
+                - text: PROMOS consult GmbH
+                - link "PROMOS consult GmbH auf LinkedIn" [ref=e82] [cursor=pointer]:
+                  - /url: https://de.linkedin.com/company/promos-consult-projektmanagement-organisation-und-service-gmbh
+                  - img [ref=e83]
+      - generic [ref=e85]:
+        - heading "Skills" [level=2] [ref=e87]
+        - generic [ref=e88]:
+          - generic [ref=e89]:
+            - paragraph [ref=e90]: Sprachen
+            - generic [ref=e91]:
+              - generic [ref=e93]:
+                - generic [ref=e94]: Java / Kotlin
+                - generic [ref=e95]: 0%
+              - generic [ref=e98]:
+                - generic [ref=e99]: TypeScript / JavaScript
+                - generic [ref=e100]: 0%
+              - generic [ref=e103]:
+                - generic [ref=e104]: Python / Bash
+                - generic [ref=e105]: 0%
+              - generic [ref=e108]:
+                - generic [ref=e109]: HTML / CSS / SASS
+                - generic [ref=e110]: 0%
+          - generic [ref=e112]:
+            - paragraph [ref=e113]: Frameworks
+            - generic [ref=e114]:
+              - generic [ref=e116]:
+                - generic [ref=e117]: Android SDK
+                - generic [ref=e118]: 0%
+              - generic [ref=e121]:
+                - generic [ref=e122]: Angular / React
+                - generic [ref=e123]: 0%
+              - generic [ref=e126]:
+                - generic [ref=e127]: Express
+                - generic [ref=e128]: 0%
+          - generic [ref=e130]:
+            - paragraph [ref=e131]: DevOps
+            - generic [ref=e134]:
+              - generic [ref=e135]: Azure DevOps
+              - generic [ref=e136]: 0%
+          - generic [ref=e138]:
+            - paragraph [ref=e139]: Tools
+            - generic [ref=e142]:
+              - generic [ref=e143]: Git
+              - generic [ref=e144]: 0%
+      - generic [ref=e146]:
+        - heading "Ausbildung" [level=2] [ref=e148]
+        - generic [ref=e149]:
+          - generic [ref=e150]:
+            - generic [ref=e151]:
+              - heading "Master Medieninformatik" [level=3] [ref=e152]
+              - paragraph [ref=e153]: Berliner Hochschule für Technik
+            - generic [ref=e155]: seit 04/2025
+          - generic [ref=e156]:
+            - generic [ref=e157]:
+              - heading "B.Sc. Medieninformatik" [level=3] [ref=e158]
+              - paragraph [ref=e159]: Berliner Hochschule für Technik
+            - generic [ref=e160]:
+              - generic [ref=e161]: 04/2019 – 03/2023
+              - generic [ref=e162]: "Note: 1,5"
+          - generic [ref=e163]:
+            - generic [ref=e164]:
+              - heading "Abitur" [level=3] [ref=e165]
+              - paragraph [ref=e166]: Lise-Meitner-Gymnasium, Falkensee
+            - generic [ref=e168]: 08/2011 – 03/2017
+      - generic [ref=e169]:
+        - heading "Sprachen" [level=2] [ref=e171]
+        - generic [ref=e172]:
+          - generic [ref=e173]: Deutsch – Muttersprache
+          - generic [ref=e174]: Englisch – Gute Kenntnisse
+  - contentinfo [ref=e175]:
+    - generic [ref=e176]:
+      - generic [ref=e177]: © 2026 Manuel Scholtes
+      - link "Impressum" [ref=e178] [cursor=pointer]:
+        - /url: /impressum

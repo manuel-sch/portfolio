@@ -1,158 +1,113 @@
 /**
  * Lebenslauf – Client-seitige Interaktionen
  *
- * 1. Timeline-Sticky-Scroll: Vertikales Durchscrollen der Berufserfahrung
- *    als Card-Stack mit Fade/Slide-Animation und seitlichem Text-Indikator.
+ * 1. Timeline-Crossfade: Scroll-getriebener Card-Stack mit verzögerter
+ *    Einblendung der nächsten Card („Dip"-Timing).
  * 2. Skill-Bars: Animierte Prozentbalken via IntersectionObserver.
+ *
+ * STYLE-EXCEPTION: card.style.opacity, tab.style.opacity, tab.style.borderColor,
+ * bar.style.width, bar.style.transition, bar.style.backgroundColor werden direkt
+ * gesetzt, da sie scroll-/observer-getrieben sind und nicht sinnvoll über CSS
+ * Custom Properties abgebildet werden können.
  */
 
 // ---------------------------------------------------------------------------
-// 1. Timeline Card Stack – Scroll-Animation
+// 1. Timeline Card Stack – Scroll-Crossfade
 // ---------------------------------------------------------------------------
 
-// -- Positionierung der Karten relativ zur aktiven Karte --
-const CARD_PAST_Y_OFFSET        = -40;  // translateY für bereits passierte Karten
-const CARD_PAST_SCALE           = 0.9;  // scale für bereits passierte Karten
-const CARD_FUTURE_Y_OFFSET      = 80;   // translateY für nachfolgende Karten
-const CARD_FUTURE_SCALE         = 0.88; // scale für nachfolgende Karten
-
-// -- Exit-Animation: aktive Karte fährt langsam nach oben heraus --
-const ACTIVE_EXIT_Y_PER_PROGRESS     = 50;   // translateY-Faktor pro Fortschritt
-const ACTIVE_EXIT_SCALE_PER_PROGRESS = 0.05; // scale-Abnahme pro Fortschritt
-
-// -- Text-Indikator --
-const INDICATOR_INACTIVE_OPACITY = 0.25;
-const INDICATOR_CLICK_OFFSET_PX  = 10;
-
-/**
- * Berechnet den aktuellen Scroll-Zustand innerhalb der Timeline-Sektion.
- *
- * @returns activeIndex  – welche Karte gerade sichtbar ist (0-basiert)
- * @returns progress     – wie weit der Nutzer innerhalb dieser Karte gescrollt hat (0…1)
- */
-function computeTimelineScrollState(
-  section: HTMLElement,
-  scrollPerCard: number,
-  totalCards: number,
-): { activeIndex: number; progress: number } {
-  const sectionTopInPage = section.getBoundingClientRect().top + window.scrollY;
-  const rawScroll        = Math.max(0, window.scrollY - sectionTopInPage);
-  const sectionHeight    = section.offsetHeight;
-  const isPastSection    = rawScroll >= sectionHeight;
-  const clampedScroll    = isPastSection ? sectionHeight : rawScroll;
-  const activeIndex      = Math.min(Math.floor(clampedScroll / scrollPerCard), totalCards - 1);
-  const progress         = isPastSection
-    ? 1
-    : Math.min((clampedScroll % scrollPerCard) / scrollPerCard, 1);
-
-  return { activeIndex, progress };
-}
-
-/**
- * Wendet CSS-Transform und Opacity auf eine Karte an, abhängig von ihrer
- * Distanz zur aktiven Karte.
- *
- * @param distanceFromActive  < 0 = bereits passiert | 0 = aktiv | > 0 = kommt noch
- * @param isLastCard          true, wenn die aktive Karte die letzte der Liste ist
- */
-function applyCardStyle(
-  card: HTMLElement,
-  glow: HTMLElement | undefined,
-  distanceFromActive: number,
-  isLastCard: boolean,
-  progress: number,
-): void {
-  // -- Bereits passierte Karten: ausgeblendet, nach oben verschoben --
-  if (distanceFromActive < 0) {
-    card.style.opacity       = '0';
-    card.style.transform     = `translateY(${CARD_PAST_Y_OFFSET}px) scale(${CARD_PAST_SCALE})`;
-    card.style.pointerEvents = 'none';
-    card.style.visibility    = 'hidden';
-    if (glow) glow.style.opacity = '0';
-    return;
-  }
-
-  // -- Nachfolgende Karten: ausgeblendet, nach unten versetzt --
-  if (distanceFromActive > 0) {
-    card.style.opacity       = '0';
-    card.style.transform     = `translateY(${CARD_FUTURE_Y_OFFSET}px) scale(${CARD_FUTURE_SCALE})`;
-    card.style.pointerEvents = 'none';
-    card.style.visibility    = 'hidden';
-    if (glow) glow.style.opacity = '0';
-    return;
-  }
-
-  // -- Aktive Karte: voll sichtbar, Exit-Animation nur für nicht-letzte Karten --
-  const shouldExit = !isLastCard && progress > 0;
-  const translateY = shouldExit ? -progress * ACTIVE_EXIT_Y_PER_PROGRESS : 0;
-  const scale      = shouldExit ? 1 - progress * ACTIVE_EXIT_SCALE_PER_PROGRESS : 1;
-
-  card.style.opacity       = '1';
-  card.style.transform     = `translateY(${translateY}px) scale(${scale})`;
-  card.style.pointerEvents = 'auto';
-  card.style.visibility    = 'visible';
-  if (glow) glow.style.opacity = '0';
-}
-
-/**
- * Aktualisiert die Opacity der seitlichen Text-Indikatoren.
- * Nur der Indikator der aktiven Karte leuchtet voll.
- */
-function highlightActiveIndicator(
-  indicators: NodeListOf<HTMLElement>,
-  activeIndex: number,
-): void {
-  indicators.forEach((indicator, index) => {
-    indicator.style.opacity = index === activeIndex ? '1' : String(INDICATOR_INACTIVE_OPACITY);
-  });
-}
+/** Für Cleanup bei View-Transition-Navigation */
+let timelineAbortController: AbortController | null = null;
 
 function initTimeline(): void {
-  const cards      = document.querySelectorAll<HTMLElement>('.timeline-card');
-  const glows      = document.querySelectorAll<HTMLElement>('.card-glow');
-  const indicators = document.querySelectorAll<HTMLElement>('.timeline-indicator');
-  const section    = document.getElementById('timeline-section');
+  // Vorherige Listener aufräumen (View-Transition-Navigation)
+  timelineAbortController?.abort();
+  timelineAbortController = new AbortController();
+  const { signal } = timelineAbortController;
 
+  const cards = document.querySelectorAll<HTMLElement>('.timeline-card');
+  const tabs = document.querySelectorAll<HTMLElement>('.timeline-tab');
+  const section = document.getElementById('timeline-section');
   if (!cards.length || !section) return;
 
-  const totalCards         = cards.length;
-  const scrollPerCard      = section.offsetHeight / totalCards;
-  let previousActiveIndex  = 0;
+  // Schutz gegen doppelte Initialisierung
+  if (section.dataset.timelineInitialized === 'true') return;
+  section.dataset.timelineInitialized = 'true';
 
-  // -- Scroll-Handler: berechnet aktuellen Karten-Index und rendert alle Karten --
-  const onTimelineScroll = (): void => {
-    const { activeIndex, progress } = computeTimelineScrollState(section, scrollPerCard, totalCards);
+  const totalCards = cards.length;
+  const CARD_SCROLL_HEIGHT = section.offsetHeight / totalCards;
 
-    previousActiveIndex = activeIndex;
+  // Transition-Phasen (als Anteil der Card-Scroll-Strecke)
+  const OUTGOING_START = 0.60;  // ab 60% beginnt Outgoing-Fade
+  const INCOMING_START = 0.80;  // ab 80% beginnt Incoming-Fade
 
-    cards.forEach((card, index) => {
-      const distanceFromActive = index - activeIndex;
-      const isLastCard         = activeIndex === totalCards - 1;
-      applyCardStyle(card, glows[index], distanceFromActive, isLastCard, progress);
+  const setActiveTab = (index: number): void => {
+    tabs.forEach((tab, i) => {
+      tab.style.opacity = i === index ? '1' : '0.4';
     });
-
-    highlightActiveIndicator(indicators, activeIndex);
   };
 
-  // -- Klick auf Text-Indikator: zu entsprechender Karte springen --
-  indicators.forEach((indicator, index) => {
-    indicator.addEventListener('click', () => {
-      const sectionTopInPage = section.getBoundingClientRect().top + window.scrollY;
-      window.scrollTo({
-        top: sectionTopInPage + scrollPerCard * index + INDICATOR_CLICK_OFFSET_PX,
-        behavior: 'smooth',
-      });
+  const onScroll = (): void => {
+    const sectionTop = section.getBoundingClientRect().top + window.scrollY;
+    const scrollInSection = window.scrollY - sectionTop;
+    if (scrollInSection < 0) return; // Sektion noch nicht erreicht
+
+    const activeIndex = Math.min(
+      Math.floor(scrollInSection / CARD_SCROLL_HEIGHT),
+      totalCards - 1,
+    );
+    const progress = (scrollInSection % CARD_SCROLL_HEIGHT) / CARD_SCROLL_HEIGHT;
+
+    // Tab-Indikator: umschalten, sobald die nächste Card sichtbar wird
+    if (progress < INCOMING_START) {
+      setActiveTab(activeIndex);
+    } else {
+      setActiveTab(Math.min(activeIndex + 1, totalCards - 1));
+    }
+
+    cards.forEach((card, i) => {
+      if (i === activeIndex) {
+        // Aktive Card: vor Transition-Zone voll sichtbar
+        if (progress < OUTGOING_START) {
+          card.style.opacity = '1';
+        } else {
+          // Outgoing: linear von 1→0 über die letzten 40%
+          card.style.opacity = String(
+            1 - (progress - OUTGOING_START) / (1 - OUTGOING_START),
+          );
+        }
+      } else if (i === activeIndex + 1) {
+        // Nächste Card: startet verzögert in der Transition-Zone
+        if (progress < INCOMING_START) {
+          card.style.opacity = '0';
+        } else {
+          // Incoming: linear von 0→1 über die letzten 20%
+          card.style.opacity = String(
+            (progress - INCOMING_START) / (1 - INCOMING_START),
+          );
+        }
+      } else {
+        card.style.opacity = '0';
+      }
     });
+  };
+
+  // Tab-Klick: zur entsprechenden Card-Position scrollen
+  tabs.forEach((tab) => {
+    tab.addEventListener('click', () => {
+      const index = parseInt(tab.dataset.index ?? '0', 10);
+      const sectionTop = section.getBoundingClientRect().top + window.scrollY;
+      const targetScroll = sectionTop + index * CARD_SCROLL_HEIGHT;
+      window.scrollTo({ top: targetScroll, behavior: 'smooth' });
+    }, { signal });
   });
 
-  // -- Initialen Zustand ohne Transition setzen, dann CSS-Transition aktivieren --
-  onTimelineScroll();
+  window.addEventListener('scroll', onScroll, { passive: true, signal });
+  onScroll();
+
+  // CSS-Transitionen erst nach initialem DOM-Setup aktivieren
   requestAnimationFrame(() => {
-    cards.forEach(card => {
-      card.style.transition = 'all 600ms ease-out';
-    });
+    section.classList.add('ready');
   });
-  window.addEventListener('scroll', onTimelineScroll, { passive: true });
 }
 
 // ---------------------------------------------------------------------------
@@ -186,7 +141,17 @@ function getSkillColor(level: number): SkillColor {
 }
 
 function initSkillBars(): void {
-  const skillItems    = document.querySelectorAll<HTMLElement>('.skill-item');
+  const skillItems      = document.querySelectorAll<HTMLElement>('.skill-item');
+  const totalSkillItems = skillItems.length;
+
+  // Schutz gegen doppelte Initialisierung
+  if (totalSkillItems === 0) return;
+  const firstItem = skillItems[0];
+  if (firstItem.dataset.skillsInitialized === 'true') return;
+  firstItem.dataset.skillsInitialized = 'true';
+
+  let completedCount    = 0;
+
   const skillObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (!entry.isIntersecting) return;
@@ -210,10 +175,22 @@ function initSkillBars(): void {
             const { barColor, glowColor } = getSkillColor(target);
             bar.style.backgroundColor = barColor;
             bar.style.setProperty('--glow-color', glowColor);
-            setTimeout(() => {
-              bar.classList.add('pulse');
-              setTimeout(() => bar.classList.remove('pulse'), 600);
-            }, 500);
+
+            completedCount++;
+
+            // Synchronisierter Pulse: erst wenn ALLE Balken fertig geladen sind
+            if (completedCount >= totalSkillItems) {
+              setTimeout(() => {
+                document.querySelectorAll<HTMLElement>('.skill-bar').forEach(b => {
+                  b.classList.add('pulse');
+                });
+                setTimeout(() => {
+                  document.querySelectorAll<HTMLElement>('.skill-bar').forEach(b => {
+                    b.classList.remove('pulse');
+                  });
+                }, 600);
+              }, 400);
+            }
           }
 
           requestAnimationFrame(step);
@@ -227,13 +204,21 @@ function initSkillBars(): void {
   skillItems.forEach(el => skillObserver.observe(el));
 }
 
-// -- Bootstrap: Initialisierung, sobald DOM bereit ist --
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', () => {
-    initTimeline();
-    initSkillBars();
-  });
-} else {
+// ---------------------------------------------------------------------------
+// Bootstrap – Initialisierung bei Seitenaufruf & View-Transition
+// ---------------------------------------------------------------------------
+
+function initializeAll(): void {
   initTimeline();
   initSkillBars();
 }
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initializeAll);
+} else {
+  initializeAll();
+}
+
+// Reinitialisierung nach Astro View Transition
+// (dataset-Flags werden beim DOM-Austausch zurückgesetzt, daher direkt aufrufbar)
+document.addEventListener('astro:after-swap', initializeAll);

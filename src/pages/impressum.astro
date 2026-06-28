@@ -1,0 +1,46 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { pageTransition } from '@/lib/transitions';
+---
+
+<BaseLayout>
+  <main transition:name="page-content" transition:animate={pageTransition} class="max-w-5xl mx-auto px-6 pt-24 pb-20 sm:pb-32">
+    <div class="max-w-2xl mx-auto space-y-12 sm:space-y-16">
+
+      <h1 class="text-3xl sm:text-5xl font-bold font-heading text-text">Impressum</h1>
+
+      <section class="space-y-4">
+        <h2 class="text-xl font-semibold font-heading text-text">Angaben gem&auml;&szlig; &sect; 5 TMG</h2>
+        <div class="text-text-muted leading-relaxed space-y-1 text-sm sm:text-base">
+          <p>Manuel Scholtes</p>
+          <p>E-Mail: manuel-scholtes@web.de</p>
+        </div>
+      </section>
+
+      <section class="space-y-4">
+        <h2 class="text-xl font-semibold font-heading text-text">Haftungsausschluss</h2>
+        <div class="text-text-muted leading-relaxed space-y-3 text-sm sm:text-base">
+          <p>
+            Die Inhalte dieser Seite wurden mit gr&ouml;&szlig;ter Sorgfalt erstellt.
+            F&uuml;r die Richtigkeit, Vollst&auml;ndigkeit und Aktualit&auml;t der Inhalte
+            kann jedoch keine Gew&auml;hr &uuml;bernommen werden.
+          </p>
+          <p>
+            Als Diensteanbieter sind wir gem&auml;&szlig; &sect; 7 Abs. 1 TMG f&uuml;r eigene
+            Inhalte auf diesen Seiten verantwortlich. Nach &sect;&sect; 8 bis 10 TMG sind wir
+            als Diensteanbieter jedoch nicht verpflichtet, &uuml;bermittelte oder gespeicherte
+            fremde Informationen zu &uuml;berwachen.
+          </p>
+        </div>
+      </section>
+
+      <a href="/"
+         class="inline-flex items-center gap-2 px-5 min-h-[44px] rounded-full border border-border
+                text-sm font-medium text-text-muted hover:text-text hover:bg-surface-hover hover:scale-[1.02] active:scale-95
+                transition-[transform,color,background-color] duration-200 active:duration-100">
+        Zur&uuml;ck zur Startseite
+      </a>
+
+    </div>
+  </main>
+</BaseLayout>

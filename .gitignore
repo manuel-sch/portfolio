@@ -21,3 +21,6 @@ Thumbs.db
 
 # Dev tools
 .vscode/
+
+# Claude Code (local overrides only – main config is versioned)
+.claude/settings.local.json

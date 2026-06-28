@@ -1,0 +1,24 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+---
+
+<BaseLayout>
+  <main class="max-w-5xl mx-auto px-6 pt-24 pb-20 sm:pb-32">
+    <div class="flex flex-col items-center justify-center min-h-[60vh] text-center space-y-6">
+      <span class="inline-block px-3 py-1 rounded-full text-xs font-medium uppercase tracking-widest text-accent-light border border-accent/20 bg-accent/5">
+        Coming Soon
+      </span>
+      <h1 class="text-3xl sm:text-5xl font-bold font-heading text-text">Projekte</h1>
+      <p class="text-base sm:text-lg text-text-muted max-w-md leading-relaxed">
+        Hier entsteht eine &Uuml;bersicht meiner Projekte &ndash;
+        mit horizontalem Snap-Scroll, einem Projekt pro View.
+      </p>
+      <a href="/"
+         class="inline-flex items-center gap-2 px-5 min-h-[44px] rounded-full border border-border
+                text-sm font-medium text-text-muted hover:text-text hover:bg-surface-hover hover:scale-[1.02] active:scale-95
+                transition-[transform,color,background-color] duration-200 active:duration-100">
+        Zur&uuml;ck zur Startseite
+      </a>
+    </div>
+  </main>
+</BaseLayout>

@@ -1,6 +1,6 @@
 <button
   id="theme-toggle"
-  class="relative grid place-items-center p-2 rounded-full text-text-muted hover:text-accent hover:bg-accent/10 hover:scale-110 active:scale-90 transition-[transform,color,background-color,box-shadow] duration-200 active:duration-100"
+  class="relative grid place-items-center p-2 max-sm:p-3 rounded-full text-text-muted hover:text-accent hover:bg-accent/10 hover:scale-110 active:scale-90 transition-[transform,color,background-color,box-shadow] duration-200 active:duration-100"
   aria-label="Theme wechseln"
 >
   <svg id="sun-icon" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -45,14 +45,24 @@
   const btn = document.getElementById('theme-toggle');
   const sun = document.getElementById('sun-icon');
   const moon = document.getElementById('moon-icon');
-  const html = document.documentElement;
 
-  const theme = localStorage.getItem('theme') || 'light';
-  html.classList.toggle('dark', theme === 'dark');
-  sun.classList.toggle('hidden', theme === 'dark');
-  moon.classList.toggle('hidden', theme === 'light');
+  function applyTheme() {
+    const html = document.documentElement;
+    const theme = localStorage.getItem('theme') || 'light';
+    html.classList.toggle('dark', theme === 'dark');
+    sun.classList.toggle('hidden', theme === 'dark');
+    moon.classList.toggle('hidden', theme === 'light');
+  }
+
+  // Erstmaliges Anwenden
+  applyTheme();
+
+  // Nach jeder View Transition erneut anwenden – <html> ist frisch,
+  // aber Button/Icons persistieren via transition:persist im Header
+  document.addEventListener('astro:after-swap', applyTheme);
 
   btn.addEventListener('click', () => {
+    const html = document.documentElement;
     const isDark = html.classList.toggle('dark');
     localStorage.setItem('theme', isDark ? 'dark' : 'light');
     sun.classList.toggle('hidden', isDark);

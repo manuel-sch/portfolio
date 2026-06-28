@@ -1,0 +1,34 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build output
+dist/
+.astro/
+
+# Environment & Secrets
+.env
+.env.*
+*.local
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Git
+.git/
+
+# Kilo Code (Legacy – kann nach erfolgreicher Migration gelöscht werden)
+.kilo/
+.kilocode/
+
+# Vercel
+.vercel/
+
+# Logs
+*.log

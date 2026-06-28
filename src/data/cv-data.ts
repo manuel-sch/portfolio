@@ -6,6 +6,7 @@ export interface Experience {
   description: string[];
   techStack: string[];
   logo: string;
+  linkedinUrl?: string;
 }
 
 export interface Skill {
@@ -33,6 +34,7 @@ export const experience: Experience[] = [
     ],
     techStack: ['JavaScript', 'SASS', 'Alpine.js', 'CMS'],
     logo: '/images/logos/babiel.png',
+    linkedinUrl: 'https://de.linkedin.com/company/babiel-gmbh',
   },
   {
     period: '07/2023 – 11/2023',
@@ -45,6 +47,7 @@ export const experience: Experience[] = [
     ],
     techStack: ['Kotlin', 'Android SDK', 'Jetpack', 'Coroutines'],
     logo: '/images/logos/fronius.png',
+    linkedinUrl: 'https://de.linkedin.com/company/froniusdeutschland',
   },
   {
     period: '08/2020 – 03/2023',
@@ -58,6 +61,7 @@ export const experience: Experience[] = [
     ],
     techStack: ['Java', 'Android SDK', 'Gradle', 'Material Design'],
     logo: '/images/logos/promos.gif',
+    linkedinUrl: 'https://de.linkedin.com/company/promos-consult-projektmanagement-organisation-und-service-gmbh',
   },
   {
     period: '08/2021 – 11/2021',
@@ -70,6 +74,7 @@ export const experience: Experience[] = [
     ],
     techStack: ['Azure', 'CI/CD', 'Android', 'Barrierefreiheit'],
     logo: '/images/logos/promos.gif',
+    linkedinUrl: 'https://de.linkedin.com/company/promos-consult-projektmanagement-organisation-und-service-gmbh',
   },
 ];
 
