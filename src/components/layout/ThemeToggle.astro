@@ -12,13 +12,13 @@
   </svg>
 </button>
 
-<style>
-  /* Stack icons via CSS Grid – beide liegen übereinander */
+<style lang="scss">
+  // Icons via CSS Grid stapeln – beide liegen übereinander
   #theme-toggle > svg {
     grid-area: 1 / 1;
   }
 
-  /* Sanfte Sonne↔Mond Transition mit Overshoot */
+  // Sanfte Sonne↔Mond Transition mit Overshoot
   #sun-icon, #moon-icon {
     transition: transform 150ms cubic-bezier(0.34, 1.56, 0.64, 1), opacity 150ms ease-out;
   }
@@ -33,6 +33,11 @@
     opacity: 0;
     transform: scale(0.3) rotate(-180deg);
     pointer-events: none;
+  }
+
+  // Glow-Effekt beim Theme-Toggle
+  .theme-glow {
+    box-shadow: 0 0 16px var(--color-accent-glow);
   }
 </style>
 
@@ -54,9 +59,9 @@
     moon.classList.toggle('hidden', !isDark);
 
     /* Glow-Pulse: kurzer Leuchteffekt beim Toggle */
-    btn.style.boxShadow = '0 0 16px var(--color-accent-glow)';
+    btn.classList.add('theme-glow');
     setTimeout(() => {
-      btn.style.boxShadow = '';
+      btn.classList.remove('theme-glow');
     }, 400);
   });
 </script>
